@@ -1,12 +1,14 @@
+#include <Arduino.h>
+
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ILI9341.h>
 #include <PLDuino.h>
 #include <PLDTouch.h>
 
-#include "board.h"
-#include "player.h"
-#include "bot.h"
+#include "classes/board.h"
+#include "classes/player.h"
+#include "classes/bot.h"
 
 // Initialize variables
 Adafruit_ILI9341 tft = Adafruit_ILI9341(PLDuino::LCD_CS, PLDuino::LCD_DC);
@@ -22,11 +24,11 @@ void setup()
 {
   // open the serial port at 9600 bps:
   Serial.begin(9600);
-  
+
   // Set pin modes and initialize stuff
   // NB: This line is necessary in all sketches which use PLDuino library stuff.
   PLDuino::init();
-  
+
   // Power-on LCD and set it up
   PLDuino::enableLCD();
   tft.begin();
@@ -39,7 +41,7 @@ void setup()
   tft.fillScreen(ILI9341_BLACK);
 
   gameBoard.drawBoard(tft);
-  
+
     /*
    * While the game isn't finished,
    *  1: Check who's turn it in
@@ -59,7 +61,7 @@ void setup()
    delay(2000);
    bot_X.place_X(tft, 0, 1);
    player_O.place_O(tft, touch);
-   
+
 //   save_played_piece
 //   if(game_over){
 //    return
@@ -67,8 +69,3 @@ void setup()
 };
 
 void loop(){};
-
-
-
-
-
