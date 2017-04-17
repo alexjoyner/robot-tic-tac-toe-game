@@ -1,0 +1,17 @@
+#include "../bot/bot.h"
+#include "../player/player.h"
+
+
+
+class TicTacToe{
+  public:
+    TicTacToe();
+    void play();
+    void drawBoard();
+  private:
+    Player player_O;
+    Bot bot_X;
+    void initPLDuinoProject();
+    void drawBoardLine(const Point& start, const Point& end);
+};
+7i

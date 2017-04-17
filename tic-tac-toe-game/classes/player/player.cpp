@@ -38,8 +38,8 @@ void Player::check_placing_O(Adafruit_ILI9341 &tft, PLDTouch touch){
       temp_current_X_point ++;
     }
     // Update previous touch position. Now it is current touch.
-    prev_pt = pt; 
-    total_points_in_O ++;     
+    prev_pt = pt;
+    total_points_in_O ++;
   }
   else
   {
@@ -52,11 +52,8 @@ void Player::check_placing_O(Adafruit_ILI9341 &tft, PLDTouch touch){
       total_points_in_O = 0;
     }
     started = false;
-    // Screen isn't touched currently. 
+    // Screen isn't touched currently.
     // Clear previous touch position.
     prev_pt.x = -1;
   }
 }
-
-
-

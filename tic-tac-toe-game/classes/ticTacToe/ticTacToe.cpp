@@ -11,7 +11,10 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(PLDuino::LCD_CS, PLDuino::LCD_DC);
 PLDTouch touch(PLDuino::TOUCH_CS, PLDuino::TOUCH_IRQ);
 
 TicTacToe::TicTacToe(){
-  Serial.println("Hello World 2");
+  initPLDuinoProject();
+  drawBoard();
+}
+void TicTacToe::initPLDuinoProject(){
   // Set pin modes and initialize stuff
   // NB: This line is necessary in all sketches which use PLDuino library stuff.
   PLDuino::init();
@@ -26,38 +29,34 @@ TicTacToe::TicTacToe(){
 
   // Clear the screen.
   tft.fillScreen(ILI9341_BLACK);
-
-  drawBoard();
 }
-
 void TicTacToe::drawBoard(){
   /*
  * Max width X: 320
  * Max Height Y: 240
  */
-  int width = 1;
-  int left_vert_startX = 107;
-  int right_vert_startX = 214;
-  int top_hori_startY = 80;
-  int bot_hori_startY = 160;
-//  Draw Left Vertical Line
-  drawBoardLine(left_vert_startX,0,left_vert_startX,240,width);
-//  Draw Right Vertical line
-  drawBoardLine(right_vert_startX,0,right_vert_startX,240,width);
-//  Draw Top Horizontal Line
-  drawBoardLine(0,top_hori_startY,0,top_hori_startY + width,320);
-//  Draw Bottom Horizontal Line
-  drawBoardLine(0,bot_hori_startY,0,bot_hori_startY + width,320);
+  const Point top_horizontal_start = new Point(0, 80);
+  const Point top_horizontal_end = new Point(320, 80);
+  const Point bottom_horizontal_start = new Point(0, 160);
+  const Point bottom_horizontal_end = new Point(320, 160);
+  const Point left_vertival_start = new Point(107, 0);
+  const Point left_vertival_end = new Point(107, 240);
+  const Point right_vertival_start = new Point(214, 0);
+  const Point right_vertival_end = new Point(214, 240);
+
+  drawBoardLine(top_horizontal_start, top_horizontal_end);
+  drawBoardLine(bottom_horizontal_start, bottom_horizontal_end);
+  drawBoardLine(left_vertival_start, left_vertival_end);
+  drawBoardLine(right_vertival_start, right_vertival_end);
 }
 
-void TicTacToe::drawBoardLine(int startX, int startY, int endX, int endY, int width){
-  for(int i = 0; i < width; i++){
-    tft.drawLine(
-          startX + i, startY,
-          endX + i, endY,
-          0xffff
-    );
-  }
+void TicTacToe::drawBoardLine(const Point& start, const Point& end){
+    //Serial.println(start.x);
+    // tft.drawLine(
+    //       start.x, start.y,
+    //       end.x, end.y,
+    //       0xffff
+    // );
 }
 
 void TicTacToe::play(){

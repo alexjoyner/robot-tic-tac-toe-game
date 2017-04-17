@@ -4,4 +4,8 @@
 class Game{
   public:
     Game();
+    addPlayer();
+  private:
+    int winner_indx;
+    int players[];
 };
