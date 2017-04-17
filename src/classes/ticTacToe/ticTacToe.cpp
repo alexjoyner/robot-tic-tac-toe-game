@@ -5,7 +5,7 @@
 #include <PLDTouch.h>
 
 #include "ticTacToe.h"
-#include "./utils/utils.h"
+#include "./classes/utils/utils.h"
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(PLDuino::LCD_CS, PLDuino::LCD_DC);
 PLDTouch touch(PLDuino::TOUCH_CS, PLDuino::TOUCH_IRQ);

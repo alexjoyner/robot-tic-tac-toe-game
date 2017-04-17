@@ -1,5 +1,5 @@
-#include "./bot/bot.h"
-#include "./player/player.h"
+#include "./classes/bot/bot.h"
+#include "./classes/player/player.h"
 
 
 
