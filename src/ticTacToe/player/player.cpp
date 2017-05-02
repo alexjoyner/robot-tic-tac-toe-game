@@ -2,12 +2,12 @@
 #include <PLDuino.h>
 #include <PLDTouch.h>
 #include <Adafruit_ILI9341.h>
-#include "./classes/utils/utils.h"
+#include "../../utils/utils.h"
 
 Player::Player(){}
 
 
-void Player::place_O(Adafruit_ILI9341 &tft, PLDTouch touch){
+Point Player::place_O(Adafruit_ILI9341 &tft, PLDTouch touch){
   finished = false;
   while(!finished){
     check_placing_O(tft, touch);

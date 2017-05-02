@@ -5,7 +5,7 @@
 
 Bot::Bot(){}
 
-void Bot::place_X(Adafruit_ILI9341 &tft, int col, int row){
+Point Bot::place_X(Adafruit_ILI9341 &tft, int col, int row){
     tft.drawLine(
           (row * 107) + 10, (col * 80) + 10,
           ((row +1) * 107) - 10, ((col + 1) * 80) - 10,
@@ -16,4 +16,6 @@ void Bot::place_X(Adafruit_ILI9341 &tft, int col, int row){
           ((row +1) * 107) - 10, (col * 80) + 10,
           0xffff
     );
+    Point placedAt(0, 1);
+    return placedAt;
 }
