@@ -11,6 +11,5 @@ class TicTacToe{
   private:
     Player player_O;
     Bot bot_X;
-    void initPLDuinoProject();
-    void drawBoardLine(const Point& start, const Point& end);
+    void drawBoardLine(Point, Point);
 };

@@ -11,52 +11,26 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(PLDuino::LCD_CS, PLDuino::LCD_DC);
 PLDTouch touch(PLDuino::TOUCH_CS, PLDuino::TOUCH_IRQ);
 
 TicTacToe::TicTacToe(){
-  initPLDuinoProject();
   drawBoard();
-}
-void TicTacToe::initPLDuinoProject(){
-  // Set pin modes and initialize stuff
-  // NB: This line is necessary in all sketches which use PLDuino library stuff.
-  PLDuino::init();
-
-  // Power-on LCD and set it up
-  PLDuino::enableLCD();
-  tft.begin();
-  tft.setRotation(3);
-
-  // Initialize touch screen
-  touch.init(1);
-
-  // Clear the screen.
-  tft.fillScreen(ILI9341_BLACK);
 }
 void TicTacToe::drawBoard(){
   /*
  * Max width X: 320
  * Max Height Y: 240
  */
-  const Point top_horizontal_start = new Point(0, 80);
-  const Point top_horizontal_end = new Point(320, 80);
-  const Point bottom_horizontal_start = new Point(0, 160);
-  const Point bottom_horizontal_end = new Point(320, 160);
-  const Point left_vertival_start = new Point(107, 0);
-  const Point left_vertival_end = new Point(107, 240);
-  const Point right_vertival_start = new Point(214, 0);
-  const Point right_vertival_end = new Point(214, 240);
-
-  drawBoardLine(top_horizontal_start, top_horizontal_end);
-  drawBoardLine(bottom_horizontal_start, bottom_horizontal_end);
-  drawBoardLine(left_vertival_start, left_vertival_end);
-  drawBoardLine(right_vertival_start, right_vertival_end);
+  drawBoardLine(Point point(0, 80), Point point(320, 80));
+  drawBoardLine(Point point(0, 160), Point point(320, 160));
+  drawBoardLine(Point point(107, 0), Point point(214, 0));
+  drawBoardLine(Point point(214, 0), Point point(214, 240));
 }
 
-void TicTacToe::drawBoardLine(const Point& start, const Point& end){
-    //Serial.println(start.x);
-    // tft.drawLine(
-    //       start.x, start.y,
-    //       end.x, end.y,
-    //       0xffff
-    // );
+void TicTacToe::drawBoardLine(Point start, Point end){
+    Serial.println(start.x);
+    tft.drawLine(
+          start.x, start.y,
+          end.x, end.y,
+          0xffff
+    );
 }
 
 void TicTacToe::play(){
