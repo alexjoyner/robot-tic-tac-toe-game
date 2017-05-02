@@ -9,7 +9,7 @@
 class Bot{
   public:
     Bot();
-    Point place_X(Adafruit_ILI9341 &tft, bool [3][3]);
+    Point place_X(Adafruit_ILI9341 &tft, char [3][3]);
   private:
-    Point findBest(bool boardState[3][3]);
+    Point findBest(char boardState[3][3]);
 };

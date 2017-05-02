@@ -79,7 +79,7 @@ void TicTacToe::play(){
 }
 
 void TicTacToe::checkGameOver(Point botPlay, int playerPlay) {
-  playedTiles[botPlay.x][botPlay.y] = 1;
+  playedTiles[botPlay.x][botPlay.y] = 'X';
   Serial.print("Current Board State \n");
   for (size_t i = 0; i < 3; i++) {
     for (size_t j = 0; j < 3; j++) {

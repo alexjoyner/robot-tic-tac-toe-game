@@ -10,10 +10,10 @@ class TicTacToe{
     void drawBoard();
   private:
     bool game_over;
-    bool playedTiles[3][3] = {
-      {0,0,0},
-      {0,0,0},
-      {0,0,0}
+    char playedTiles[3][3] = {
+      {'-', '-', '-'},
+      {'-', '-', '-'},
+      {'-', '-', '-'}
     };
     Player player_O;
     Bot bot_X;

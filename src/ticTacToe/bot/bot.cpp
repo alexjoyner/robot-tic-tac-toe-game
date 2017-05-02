@@ -5,7 +5,7 @@
 
 Bot::Bot(){}
 
-Point Bot::place_X(Adafruit_ILI9341 &tft, bool boardState[3][3]){
+Point Bot::place_X(Adafruit_ILI9341 &tft, char boardState[3][3]){
     Point choice = findBest(boardState);
     int row = choice.x;
     int col = choice.y;
@@ -22,7 +22,17 @@ Point Bot::place_X(Adafruit_ILI9341 &tft, bool boardState[3][3]){
     return choice;
 }
 
-Point Bot::findBest(bool boardState[3][3]){
-  Point choice(2, 1);
+Point Bot::findBest(char boardState[3][3]){
+  Point choice;
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      if(boardState[i][j] == '-'){
+        Point tmp(i, j);
+        choice = tmp;
+        goto foundChoice;
+      }
+    }
+  }
+foundChoice:
   return choice;
 }
