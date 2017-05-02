@@ -8,16 +8,16 @@ class TicTacToe{
     TicTacToe();
     void play();
     void drawBoard();
+    char check_win(char board[3][3]);
   private:
-    bool game_over;
-    char playedTiles[3][3] = {
-      {'-', '-', '-'},
-      {'-', '-', '-'},
-      {'-', '-', '-'}
+    bool moves = 0;
+    char board[3][3] = {
+      {'.', '.', '.'},
+      {'.', '.', '.'},
+      {'.', '.', '.'}
     };
     Player player_O;
     Bot bot_X;
     void initPLDuinoProject();
     void drawBoardLine(Point&, Point&);
-    void checkGameOver(Point, int);
 };

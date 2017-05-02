@@ -11,7 +11,6 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(PLDuino::LCD_CS, PLDuino::LCD_DC);
 PLDTouch touch(PLDuino::TOUCH_CS, PLDuino::TOUCH_IRQ);
 
 TicTacToe::TicTacToe(){
-  game_over = false;
   initPLDuinoProject();
   drawBoard();
 }
@@ -63,29 +62,49 @@ void TicTacToe::drawBoardLine(Point& start, Point& end){
 }
 
 void TicTacToe::play(){
-    /*
-   * While the game isn't finished,
-   *  1: Check who's turn it in
-   *  2:  if it's bot_X turn, bot_X place X
-   *  3:  if it's player_O turn, player_O place O
-   *  4: Check game over
-   */
-   int playerPlay;
-  //  while(!game_over){
-     Point botPlay = bot_X.place_X(tft, playedTiles);
-  //    player_O.place_O(tft, touch);
-     checkGameOver(botPlay, playerPlay);
-  //  }
+  while (moves < 9){
+    player_O.place_O(tft, touch);
+    moves ++;
+    if(check_win(board) != 0){
+      Serial.print("Winner: ");
+      Serial.print(check_win(board));
+      Serial.print("\n");
+    }else{
+      Serial.print("No Winner yet");
+    };
+    bot_X.place_X(tft, board);
+    moves ++;
+  }
 }
 
-void TicTacToe::checkGameOver(Point botPlay, int playerPlay) {
-  playedTiles[botPlay.x][botPlay.y] = 'X';
-  Serial.print("Current Board State \n");
-  for (size_t i = 0; i < 3; i++) {
-    for (size_t j = 0; j < 3; j++) {
-      Serial.print(playedTiles[i][j]);
-      Serial.print(", ");
-    }
-    Serial.print("\n");
-  }
+/*********************************************************************
+ ** Function: check_win
+ ** Description: Checks for three in a row in all directions.
+ ** Parameters: char[3][3]
+ ** Pre-Conditions: None.
+ ** Post-Conditions: Returns the character that that the three in a row consists of.
+ *********************************************************************/
+char TicTacToe::check_win(char board[3][3]) {
+
+	// Check horizontal, vertical & diagonal through [0][0]
+	if (board[0][0] != '.' && (board[0][0] == board[0][1] && board[0][0] == board[0][2] ||
+		board[0][0] == board[1][0] && board[0][0] == board[2][0] ||
+		board[0][0] == board[1][1] && board[0][0] == board[2][2]))
+
+		return board[0][0];
+
+	// Check horizontal, vertical & diagonal through [1][1]
+	if (board[1][1] != '.' && (board[1][1] == board[1][0] && board[1][1] == board[1][2] ||
+		board[1][1] == board[0][1] && board[1][1] == board[2][1] ||
+		board[1][1] == board[2][0] && board[1][1] == board[0][2]))
+
+		return board[1][1];
+
+	// Check horizontal, vertical & diagonal through [2][2]
+	if (board[2][2] != '.' && (board[2][2] == board[0][2] && board[2][2] == board[1][2] ||
+		board[2][2] == board[2][0] && board[2][2] == board[2][1]))
+
+		return board[2][2];
+
+	return 0;
 }

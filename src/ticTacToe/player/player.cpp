@@ -19,9 +19,9 @@ void Player::check_placing_O(Adafruit_ILI9341 &tft, PLDTouch touch){
   // Check if user touched the screen
   if (touch.dataAvailable())
   {
-    if(started == false){
-      Serial.println("drawing O");
-    }
+    // if(started == false){
+    //   Serial.println("drawing O");
+    // }
     started = true;
     // Read touch position
     Point pt = touch.read();
@@ -44,9 +44,9 @@ void Player::check_placing_O(Adafruit_ILI9341 &tft, PLDTouch touch){
   else
   {
     if(started == true) {
-      Serial.println("finished O");
+      //Serial.println("finished O");
       finished = true;
-      printArray(tempX_points, 100);
+      //printArray(tempX_points, 100);
       clearArray(tempX_points, 100);
       temp_current_X_point = 0;
       total_points_in_O = 0;
