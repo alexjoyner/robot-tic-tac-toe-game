@@ -71,12 +71,21 @@ void TicTacToe::play(){
    *  4: Check game over
    */
    int playerPlay;
-   while(!game_over){
-     Point botPlay = bot_X.place_X(tft, 1, 0);
-     player_O.place_O(tft, touch);
+  //  while(!game_over){
+     Point botPlay = bot_X.place_X(tft, playedTiles);
+  //    player_O.place_O(tft, touch);
      checkGameOver(botPlay, playerPlay);
-   }
+  //  }
 }
 
 void TicTacToe::checkGameOver(Point botPlay, int playerPlay) {
+  playedTiles[botPlay.x][botPlay.y] = 1;
+  Serial.print("Current Board State \n");
+  for (size_t i = 0; i < 3; i++) {
+    for (size_t j = 0; j < 3; j++) {
+      Serial.print(playedTiles[i][j]);
+      Serial.print(", ");
+    }
+    Serial.print("\n");
+  }
 }
