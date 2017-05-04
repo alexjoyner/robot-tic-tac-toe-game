@@ -1,6 +1,11 @@
+#include <SPI.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_ILI9341.h>
 #include <PLDuino.h>
 #include <PLDTouch.h>
-#include "./point/point.h"
 
-void printArray(int given_array[], int num_elements);
-void clearArray(int given_array[], int num_elements);
+void printArray(Point pointArray[], int num_elements);
+void clearArray(Point pointArray[], int num_elements);
+void print_board(char board[3][3]);
+Point getCenterPoint(Point arr[], int num_elements);
+bool isBetweenPoints(Point, Point, Point);

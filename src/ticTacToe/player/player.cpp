@@ -3,57 +3,55 @@
 #include <PLDTouch.h>
 #include <Adafruit_ILI9341.h>
 #include "../../utils/utils.h"
-
+#include "../ticTacToe.h"
 Player::Player(){}
 
-
-Point Player::place_O(Adafruit_ILI9341 &tft, PLDTouch touch){
-  finished = false;
-  while(!finished){
-    check_placing_O(tft, touch);
-  }
+void Player::place_O(Adafruit_ILI9341 &tft, PLDTouch touch, char board[3][3]){
+  Point placedIn = getPositionInput(tft, touch);
+  TicTacToe::sendSelectionToRobot('o', placedIn);
+  board[placedIn.x][placedIn.y] = 'o';
 }
 
 
-void Player::check_placing_O(Adafruit_ILI9341 &tft, PLDTouch touch){
-  // Check if user touched the screen
-  if (touch.dataAvailable())
-  {
-    // if(started == false){
-    //   Serial.println("drawing O");
-    // }
-    started = true;
-    // Read touch position
-    Point pt = touch.read();
-
-    // Draw line between current touch and previous touch, if any
-    if (prev_pt.x != -1)
-      tft.drawLine(
-        prev_pt.x, prev_pt.y,
-        pt.x, pt.y,
-        0xffff
-      );
-    if(pt.x != prev_pt.x & total_points_in_O % 4 == 0){
-      tempX_points[temp_current_X_point] = pt.x;
-      temp_current_X_point ++;
+Point Player::getPositionInput(Adafruit_ILI9341 &tft, PLDTouch touch){
+  bool finished = false;
+  bool startedPlacing = false;
+  Point prev_pt;
+  Point playPoints[100];
+  int count_points = 0;
+  int count_every_4th_point = 0;
+  while(!finished){
+    if (touch.dataAvailable()){
+      startedPlacing = true;
+      Point pt = touch.read();
+      if (prev_pt.x != -1)
+        tft.drawLine(
+          prev_pt.x, prev_pt.y,
+          pt.x, pt.y,
+          0xffff
+        );
+      // To get an accurate average of placed shape
+      // only use every 4th point of the shape drawn
+      if((pt.x != prev_pt.x) && ((count_points % 4 == 0) || count_points < 4)){
+        playPoints[count_every_4th_point] = pt;
+        count_every_4th_point ++;
+      }
+      prev_pt = pt;
+      count_points ++;
     }
-    // Update previous touch position. Now it is current touch.
-    prev_pt = pt;
-    total_points_in_O ++;
-  }
-  else
-  {
-    if(started == true) {
-      //Serial.println("finished O");
-      finished = true;
-      //printArray(tempX_points, 100);
-      clearArray(tempX_points, 100);
-      temp_current_X_point = 0;
-      total_points_in_O = 0;
+    else
+    {
+      if(startedPlacing) {
+        finished = true;
+      }
+      startedPlacing = false;
+      // Screen isn't touched currently.
+      // Clear previous touch position.
+      prev_pt.x = -1;
     }
-    started = false;
-    // Screen isn't touched currently.
-    // Clear previous touch position.
-    prev_pt.x = -1;
   }
+  //printArray(playPoints, 100);
+  Point center = getCenterPoint(playPoints, 100);
+  Point placedIn = TicTacToe::getQuadrantOfPoint(center);
+  return placedIn;
 }

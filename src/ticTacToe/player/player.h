@@ -1,3 +1,5 @@
+#ifndef PLAYER_H
+#define PLAYER_H
 #include <PLDuino.h>
 #include <PLDTouch.h>
 #include <Adafruit_ILI9341.h>
@@ -5,13 +7,9 @@
 class Player{
   public:
     Player();
-    Point place_O(Adafruit_ILI9341 &tft, PLDTouch touch);
+    void place_O(Adafruit_ILI9341 &tft, PLDTouch touch, char board[3][3]);
   private:
-    void check_placing_O(Adafruit_ILI9341 &tft, PLDTouch touch);
-    Point prev_pt;
-    bool started = false;
-    bool finished = false;
-    int tempX_points[100];
-    int temp_current_X_point = 0;
-    int total_points_in_O = 0;
+    Point getPositionInput(Adafruit_ILI9341 &tft, PLDTouch touch);
 };
+
+#endif

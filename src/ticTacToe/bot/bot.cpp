@@ -3,27 +3,28 @@
 #include <PLDTouch.h>
 #include <Adafruit_ILI9341.h>
 
+#include "../ticTacToe.h"
 Bot::Bot(){}
 
-Point Bot::place_X(Adafruit_ILI9341 &tft, char board[3][3]){
-    int where_to_move = pick_best_move(board);
+void Bot::place_X(Adafruit_ILI9341 &tft, char board[3][3]){
+    int where_to_move = pick_best_move(board, bot, player);
     int row = where_to_move / 10;
     int col = where_to_move % 10;
     tft.drawLine(
-          (row * 107) + 10, (col * 80) + 10,
-          ((row +1) * 107) - 10, ((col + 1) * 80) - 10,
+          (col * 107) + 10, (row * 80) + 10,
+          ((col +1) * 107) - 10, ((row + 1) * 80) - 10,
           0xffff
     );
     tft.drawLine(
-          (row * 107) + 10, ((col + 1) * 80) - 10,
-          ((row +1) * 107) - 10, (col * 80) + 10,
+          (col * 107) + 10, ((row + 1) * 80) - 10,
+          ((col +1) * 107) - 10, (row * 80) + 10,
           0xffff
     );
-    Point choice(row, col);
-    return choice;
+    board[row][col] = bot;
 }
 
-int Bot::pick_best_move(char board[3][3]) {
+int Bot::pick_best_move(char board[3][3], char player1, char player2) {
+
 	int best_move_score = -9999;
 	int best_move_row = -9999;
 	int best_move_col = -9999;
@@ -32,8 +33,8 @@ int Bot::pick_best_move(char board[3][3]) {
 	for (int r = 0; r < 3; r++) {
 		for (int c = 0; c < 3; c++) {
 			if (board[r][c] == '.') {
-				board[r][c] = bot; //Try test move.
-				score_for_this_move = -(negamax(board));
+				board[r][c] = player1; //Try test move.
+				score_for_this_move = -(negamax(board, player2, player1));
 				board[r][c] = '.'; //Put back test move.
 				if (score_for_this_move >= best_move_score) {
 					best_move_score = score_for_this_move;
@@ -54,24 +55,24 @@ int Bot::pick_best_move(char board[3][3]) {
  ** Pre-Conditions: pick_best_move has been called.
  ** Post-Conditions: Returns best_score_move to pick_best_move
  *********************************************************************/
-int Bot::negamax(char board[3][3]) {
+int Bot::negamax(char board[3][3], char player1, char player2) {
 
 	int best_move_score = -9999;
 	int score_for_this_move = 0;
 
-	//If player 1 wins, then the score is high (good for bot)
-	if (check_win(board) == bot)
+	//If player 1 wins, then the score is high (good for player1)
+	if (TicTacToe::check_win(board) == player1)
 		return 1000;
 
-	//If player 2 loses, then the score is low (bad for bot)
-	else if (check_win(board) == player)
+	//If player 2 loses, then the score is low (bad for player1)
+	else if (TicTacToe::check_win(board) == player2)
 		return -1000;
 
 	for (int r = 0; r < 3; r++) {
 		for (int c = 0; c < 3; c++) {
 			if (board[r][c] == '.') {
-				board[r][c] = bot; //Try test move.
-				score_for_this_move = -(negamax(board, player, bot));
+				board[r][c] = player1; //Try test move.
+				score_for_this_move = -(negamax(board, player2, player1));
 				board[r][c] = '.'; //Put back test move.
 				if (score_for_this_move >= best_move_score) {
 					best_move_score = score_for_this_move;
