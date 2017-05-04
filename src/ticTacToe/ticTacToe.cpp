@@ -12,7 +12,7 @@ PLDTouch touch(PLDuino::TOUCH_CS, PLDuino::TOUCH_IRQ);
 
 TicTacToe::TicTacToe(){
   initPLDuinoProject();
-  drawBoard();
+  initBoard();
 }
 void TicTacToe::initPLDuinoProject(){
   // Set pin modes and initialize stuff
@@ -31,7 +31,12 @@ void TicTacToe::initPLDuinoProject(){
   tft.fillScreen(ILI9341_BLACK);
 }
 
-void TicTacToe::drawBoard(){
+void TicTacToe::initBoard(){
+  for (size_t i = 0; i < 3; i++) {
+    for (size_t j = 0; j < 3; j++) {
+      board[i][j] = '.';
+    }
+  }
   /*
   * Max width X: 320
   * Max Height Y: 240
@@ -45,14 +50,14 @@ void TicTacToe::drawBoard(){
   Point right_vertival_start(214, 0);
   Point right_vertival_end(214, 240);
 
-  drawBoardLine(top_horizontal_start, top_horizontal_end);
-  drawBoardLine(bottom_horizontal_start, bottom_horizontal_end);
-  drawBoardLine(left_vertival_start, left_vertival_end);
-  drawBoardLine(right_vertival_start, right_vertival_end);
+  initBoardLine(top_horizontal_start, top_horizontal_end);
+  initBoardLine(bottom_horizontal_start, bottom_horizontal_end);
+  initBoardLine(left_vertival_start, left_vertival_end);
+  initBoardLine(right_vertival_start, right_vertival_end);
 
 }
 
-void TicTacToe::drawBoardLine(Point& start, Point& end){
+void TicTacToe::initBoardLine(Point& start, Point& end){
     Serial.println(start.x);
     tft.drawLine(
           start.x, start.y,
@@ -62,6 +67,11 @@ void TicTacToe::drawBoardLine(Point& start, Point& end){
 }
 
 void TicTacToe::play(){
+  runMainLogic();
+  reset();
+}
+void TicTacToe::runMainLogic(){
+  moves = 0;
   while (moves < 9){
     player_O.place_O(tft, touch, board);
     moves ++;
@@ -69,7 +79,6 @@ void TicTacToe::play(){
       Serial.print("Winner: ");
       Serial.print(check_win(board));
       Serial.print("\n");
-      cleanBoardBoard(board);
       return;
     };
     bot_X.place_X(tft, board);
@@ -79,14 +88,18 @@ void TicTacToe::play(){
       Serial.print("Winner: ");
       Serial.print(check_win(board));
       Serial.print("\n");
-      cleanBoardBoard(board);
       return;
     };
   }
   Serial.println("CAT!!!");
-  cleanBoardBoard(board);
 }
-
+void TicTacToe::reset(){
+  cleanBoard(board);
+  // Clear the screen.
+  tft.fillScreen(ILI9341_BLACK);
+  initBoard();
+  play();
+}
 /*********************************************************************
  ** Function: check_win
  ** Description: Checks for three in a row in all directions.
@@ -253,7 +266,7 @@ void TicTacToe::sendSelectionToRobot(char player, Point position){
     digitalWrite(38+i, LOW);
   }
 }
-void TicTacToe::cleanBoardBoard(char board[3][3]){
+void TicTacToe::cleanBoard(char board[3][3]){
   for (size_t i = 0; i < 3; i++) {
     for (size_t j = 0; j < 3; j++) {
       if(board[i][j] != '.'){

@@ -14,7 +14,7 @@ class TicTacToe{
   public:
     TicTacToe();
     void play();
-    void drawBoard();
+    void initBoard();
     static char check_win(char board[3][3]);
     static Point getQuadrantOfPoint(Point point);
     static void sendSelectionToRobot(char player, Point position);
@@ -22,16 +22,14 @@ class TicTacToe{
     static void drawX(int row,int col);
   private:
     int moves = 0;
-    char board[3][3] = {
-      {'.', '.', '.'},
-      {'.', '.', '.'},
-      {'.', '.', '.'}
-    };
+    char board[3][3];
     Player player_O;
     Bot bot_X;
+    void runMainLogic();
     void initPLDuinoProject();
-    void drawBoardLine(Point&, Point&);
-    void cleanBoardBoard(char board[3][3]);
+    void initBoardLine(Point&, Point&);
+    void cleanBoard(char board[3][3]);
     void removePieceFromBoard(Point position);
+    void reset();
 };
 #endif
