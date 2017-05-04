@@ -29,5 +29,7 @@ class TicTacToe{
     Bot bot_X;
     void initPLDuinoProject();
     void drawBoardLine(Point&, Point&);
+    void cleanBoardBoard(char board[3][3]);
+    void removePieceFromBoard(Point position);
 };
 #endif

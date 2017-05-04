@@ -65,23 +65,25 @@ void TicTacToe::play(){
   while (moves < 9){
     player_O.place_O(tft, touch, board);
     moves ++;
-    // if(check_win(board) != 0){
-    //   Serial.print("Winner: ");
-    //   Serial.print(check_win(board));
-    //   Serial.print("\n");
-    //   return;
-    // };
-    delay(1000);
-    // bot_X.place_X(tft, board);
-    // moves ++;
-    // print_board(board);
-    // if(check_win(board) != 0){
-    //   Serial.print("Winner: ");
-    //   Serial.print(check_win(board));
-    //   Serial.print("\n");
-    //   return;
-    // };
+    if(check_win(board) != 0){
+      Serial.print("Winner: ");
+      Serial.print(check_win(board));
+      Serial.print("\n");
+      cleanBoardBoard(board);
+      return;
+    };
+    bot_X.place_X(tft, board);
+    moves ++;
+    print_board(board);
+    if(check_win(board) != 0){
+      Serial.print("Winner: ");
+      Serial.print(check_win(board));
+      Serial.print("\n");
+      cleanBoardBoard(board);
+      return;
+    };
   }
+  cleanBoardBoard(board);
   Serial.println("CAT!!!");
 }
 
@@ -175,25 +177,67 @@ Point TicTacToe::getQuadrantOfPoint(Point point){
 }
 
 void TicTacToe::sendSelectionToRobot(char player, Point position){
-  // int bonus;
-  // if(player == 'x'){
-  //   bonus = 10;
-  // }
-  int areaCode = (position.x * 3) + position.y;
-  byte OutMatrix[18] = {
-     B00000001,
-     B00000010,
-     B00000011,
-     B00000100,
-     B00000101,
-     B00000110,
-     B00000111,
-     B00001000,
-     B00001001
-   };
-  byte resultSignal = OutMatrix[areaCode];
-  for(int i = 0; i < 8; i++){
-    digitalWrite(38+i, bitRead(resultSignal, i) == 1? HIGH : LOW);
+  int playerOffset = 0;
+  if(player == 'x'){
+    playerOffset = 9;
   }
-
+  int areaCode = ((position.x * 3) + position.y) + playerOffset;
+  byte OutMatrix[18] = {
+     B00000001, // o - 1
+     B00000010, // o - 2
+     B00000011, // o - 3
+     B00000100, // o - 4
+     B00000101, // o - 5
+     B00000110, // o - 6
+     B00000111, // o - 7
+     B00001000, // o - 8
+     B00001001, // o - 9
+     B00001010, // x - 1
+     B00001011, // x - 2
+     B00001100, // x - 3
+     B00001101, // x - 4
+     B00001110, // x - 5
+     B00001111, // x - 6
+     B00010000, // x - 7
+     B00010001, // x - 8
+     B00010010  // x - 9
+   };
+  for(int i = 0; i < 8; i++){
+    digitalWrite(38+i, bitRead(OutMatrix[areaCode], i) == 1? HIGH : LOW);
+  }
+  delay(3000);
+  for (int i = 0; i < 8; i++) {
+    digitalWrite(38+i, LOW);
+  }
 }
+void TicTacToe::cleanBoardBoard(char board[3][3]){
+  for (size_t i = 0; i < 3; i++) {
+    for (size_t j = 0; j < 3; j++) {
+      if(board[i][j] != '.'){
+        Point position(i, j);
+        removePieceFromBoard(position);
+      }
+    }
+  }
+};
+void TicTacToe::removePieceFromBoard(Point position){
+  int areaCode = ((position.x * 3) + position.y);
+  byte OutMatrix[9] = {
+     B10000001, // tile- 1
+     B10000010, // tile- 2
+     B10000011, // tile- 3
+     B10000100, // tile- 4
+     B10000101, // tile- 5
+     B10000110, // tile- 6
+     B10000111, // tile- 7
+     B10001000, // tile- 8
+     B10001001, // tile- 9
+  };
+  for(int i = 0; i < 8; i++){
+    digitalWrite(38+i, bitRead(OutMatrix[areaCode], i) == 1? HIGH : LOW);
+  }
+  delay(3000);
+  for (int i = 0; i < 8; i++) {
+    digitalWrite(38+i, LOW);
+  }
+};

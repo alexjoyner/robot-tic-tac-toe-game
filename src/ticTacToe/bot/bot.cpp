@@ -20,6 +20,8 @@ void Bot::place_X(Adafruit_ILI9341 &tft, char board[3][3]){
           ((col +1) * 107) - 10, (row * 80) + 10,
           0xffff
     );
+    Point position(row, col);
+    TicTacToe::sendSelectionToRobot('x', position);
     board[row][col] = bot;
 }
 
