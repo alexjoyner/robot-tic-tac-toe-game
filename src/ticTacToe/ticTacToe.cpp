@@ -274,7 +274,7 @@ void TicTacToe::removePieceFromBoard(Point position){
      B10000110, // tile- 6
      B10000111, // tile- 7
      B10001000, // tile- 8
-     B10001001, // tile- 9
+     B10001001  // tile- 9
   };
   for(int i = 0; i < 8; i++){
     digitalWrite(38+i, bitRead(OutMatrix[areaCode], i) == 1? HIGH : LOW);
