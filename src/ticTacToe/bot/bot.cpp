@@ -10,16 +10,7 @@ void Bot::place_X(Adafruit_ILI9341 &tft, char board[3][3]){
     int where_to_move = pick_best_move(board, bot, player);
     int row = where_to_move / 10;
     int col = where_to_move % 10;
-    tft.drawLine(
-          (col * 107) + 10, (row * 80) + 10,
-          ((col +1) * 107) - 10, ((row + 1) * 80) - 10,
-          0xffff
-    );
-    tft.drawLine(
-          (col * 107) + 10, ((row + 1) * 80) - 10,
-          ((col +1) * 107) - 10, (row * 80) + 10,
-          0xffff
-    );
+    TicTacToe::drawX(row, col);
     Point position(row, col);
     TicTacToe::sendSelectionToRobot('x', position);
     board[row][col] = bot;

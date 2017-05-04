@@ -3,7 +3,7 @@
 #include <Adafruit_ILI9341.h>
 #include <PLDuino.h>
 #include <PLDTouch.h>
-
+#include "math.h"
 #include "ticTacToe.h"
 #include "../utils/utils.h"
 
@@ -83,8 +83,8 @@ void TicTacToe::play(){
       return;
     };
   }
-  cleanBoardBoard(board);
   Serial.println("CAT!!!");
+  cleanBoardBoard(board);
 }
 
 /*********************************************************************
@@ -117,6 +117,48 @@ char TicTacToe::check_win(char board[3][3]) {
 		return board[2][2];
 
 	return 0;
+}
+void TicTacToe::drawX(int row,int col){
+  tft.drawLine(
+        (col * 107) + 10, (row * 80) + 10,
+        ((col +1) * 107) - 10, ((row + 1) * 80) - 10,
+        0xffff
+  );
+  tft.drawLine(
+        (col * 107) + 10, ((row + 1) * 80) - 10,
+        ((col +1) * 107) - 10, (row * 80) + 10,
+        0xffff
+  );
+}
+void TicTacToe::drawO(int row,int col){
+  int xCenter = ((col * 107) + 53);
+  int yCenter = ((row * 80) + 40);
+  int x = ((col * 107) + 10), y = (((row + 1) * 80) - 10), r2;
+  int radius = 30;
+  r2 = radius * radius;
+  for (x = -radius; x <= radius; x++) {
+      y = (int) (sqrt(r2 - x*x) + 0.5);
+      tft.drawLine(
+            xCenter + x, yCenter + y,
+            xCenter + x, yCenter + y,
+            0xffff
+      );
+      tft.drawLine(
+            xCenter - x, yCenter - y,
+            xCenter - x, yCenter - y,
+            0xffff
+      );
+      tft.drawLine(
+            xCenter - x, yCenter + y,
+            xCenter - x, yCenter + y,
+            0xffff
+      );
+      tft.drawLine(
+            xCenter + x, yCenter - y,
+            xCenter + x, yCenter - y,
+            0xffff
+      );
+  }
 }
 
 Point TicTacToe::getQuadrantOfPoint(Point point){
@@ -205,7 +247,7 @@ void TicTacToe::sendSelectionToRobot(char player, Point position){
   for(int i = 0; i < 8; i++){
     digitalWrite(38+i, bitRead(OutMatrix[areaCode], i) == 1? HIGH : LOW);
   }
-  delay(3000);
+  delay(1500);
   for (int i = 0; i < 8; i++) {
     digitalWrite(38+i, LOW);
   }

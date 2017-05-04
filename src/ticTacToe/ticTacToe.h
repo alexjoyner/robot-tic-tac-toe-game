@@ -18,8 +18,10 @@ class TicTacToe{
     static char check_win(char board[3][3]);
     static Point getQuadrantOfPoint(Point point);
     static void sendSelectionToRobot(char player, Point position);
+    static void drawO(int row,int col);
+    static void drawX(int row,int col);
   private:
-    bool moves = 0;
+    int moves = 0;
     char board[3][3] = {
       {'.', '.', '.'},
       {'.', '.', '.'},
