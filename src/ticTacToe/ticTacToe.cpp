@@ -248,6 +248,7 @@ void TicTacToe::sendSelectionToRobot(char player, Point position){
     digitalWrite(38+i, bitRead(OutMatrix[areaCode], i) == 1? HIGH : LOW);
   }
   while(digitalRead(30) == LOW);
+  while(digitalRead(30) == HIGH);
   for (int i = 0; i < 8; i++) {
     digitalWrite(38+i, LOW);
   }
@@ -278,7 +279,8 @@ void TicTacToe::removePieceFromBoard(Point position){
   for(int i = 0; i < 8; i++){
     digitalWrite(38+i, bitRead(OutMatrix[areaCode], i) == 1? HIGH : LOW);
   }
-  delay(3000);
+  while(digitalRead(30) == LOW);
+  while(digitalRead(30) == HIGH);
   for (int i = 0; i < 8; i++) {
     digitalWrite(38+i, LOW);
   }
